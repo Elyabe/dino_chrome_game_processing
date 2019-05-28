@@ -11,20 +11,25 @@ PROFESSOR: Jacques Facon
 */
 
 PImage tex;
-float rotx = PI/4;
+float rotx = 0;
 float roty = PI/4;
 
 float angulo = 0, angulo_lua = 0;
+float dirY, dirX; 
 void setup() {
   size(800, 800, P3D);
   fill(255);
   stroke(1);
+  dirY = (mouseY / float(height) - 0.5) * 2;
+  dirX = (mouseX / float(width) - 0.5) * 2;
 }
 
 void draw() {
   background(0);
-  //noStroke();
+  noStroke();
+  directionalLight(204, 204, 204, -dirX, -dirY, -1);
   translate(width/2.0, height/2.0, -100);
+  angulo = (angulo + 1 ) % 360;
   rotateY(radians(angulo));
   rotateX(rotx);
   rotateY(roty);
@@ -98,15 +103,15 @@ void criar_dino()
        box(20,20,150);
     popMatrix();
     
-    
+    // Rabo
     pushMatrix();
       translate(-110,-36);
-      box(75,75,150);
+      box(75,75,120);
       pushMatrix();
         translate(-15,-48);
-        box(45,20,100);
+        box(45,20,90);
         translate(-8,-15);
-        box(30,10,80);
+        box(30,30,70);
       popMatrix();
       
       pushMatrix();
@@ -116,12 +121,14 @@ void criar_dino()
       
       
       translate(10,55);
-      box(55,35,150);
+      box(55,35,110);
       translate(15,26);
-       box(20,20,150);
+       box(20,20,110);
     popMatrix();
     
     // Pé
+    if ( keyPressed )
+      rotateZ(radians(25));
     pushMatrix();
       translate(-15,80,-35);
       box(70,20,40);
@@ -132,8 +139,11 @@ void criar_dino()
       box(60,20,40);
     popMatrix();
     
+    if ( keyPressed )
+      rotateZ(radians(-50)); 
+     
     pushMatrix();
-      translate(0,80,40);
+      translate(25,80,40);
       box(70,20,40);
       translate(0,30);
       box(30,80,40);
