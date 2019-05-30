@@ -12,27 +12,40 @@ PROFESSOR: Jacques Facon
 
 PImage tex;
 float rotx = 0;
-float roty = PI/4;
-
+float roty = PI/4, delta_x, PASSO_FRENTE = 8 , PASSO_TRAS = 16;
 float angulo = 0, angulo_lua = 0;
-float dirY, dirX; 
+float dirY, dirX, i = 0; 
 void setup() {
   size(800, 800, P3D);
   fill(255);
   stroke(1);
   dirY = (mouseY / float(height) - 0.5) * 2;
   dirX = (mouseX / float(width) - 0.5) * 2;
+  delta_x = 0;
+  //roty = 0;
 }
 
 void draw() {
-  background(0);
+  background(255);
   noStroke();
   directionalLight(204, 204, 204, -dirX, -dirY, -1);
   translate(width/2.0, height/2.0, -100);
-  angulo = (angulo + 1 ) % 360;
+  //angulo = (angulo + 0.35 ) % 360;
+  if ( keyPressed )
+  {
+    if ( key == 'u' )
+      translate(0,-150);
+    else if ( key == 'l' )
+    {
+      delta_x += 100/( PASSO_FRENTE + PASSO_TRAS );
+    }else if ( key == 'r' )
+     delta_x -= 100/( PASSO_FRENTE + PASSO_TRAS );
+  }
   rotateY(radians(angulo));
   rotateX(rotx);
   rotateY(roty);
+  scale(0.3);
+  translate( delta_x, 0);
   criar_dino();
 }
 
@@ -53,6 +66,10 @@ void criar_dino()
         box(50,25,150);
       popMatrix();
       
+      pushMatrix();
+      
+      if ( keyPressed && key == 'c' )
+        rotateZ(radians(20));
       //cabeca
       pushMatrix();
         translate(50,-105);
@@ -72,6 +89,8 @@ void criar_dino()
         
         translate(-30,-50);
         box(170,20,150);
+      popMatrix();
+      
       popMatrix();
       
       // Peitoral
@@ -127,8 +146,9 @@ void criar_dino()
     popMatrix();
     
     // Pé
-    if ( keyPressed )
+    if ( keyPressed && i < PASSO_FRENTE)
       rotateZ(radians(25));
+    
     pushMatrix();
       translate(-15,80,-35);
       box(70,20,40);
@@ -139,7 +159,7 @@ void criar_dino()
       box(60,20,40);
     popMatrix();
     
-    if ( keyPressed )
+    if ( keyPressed && i < PASSO_FRENTE)
       rotateZ(radians(-50)); 
      
     pushMatrix();
@@ -151,6 +171,13 @@ void criar_dino()
       translate(15,40);
       box(60,20,40);
     popMatrix();
+    
+    if ( i < PASSO_FRENTE )
+      i += 1;
+    else if ( i < PASSO_TRAS )
+      i += 1;
+    else 
+      i = 0;
 }
 
 void mouseDragged() {
