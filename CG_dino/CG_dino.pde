@@ -44,7 +44,7 @@ void draw() {
   rotateY(radians(angulo));
   rotateX(rotx);
   rotateY(roty);
-  scale(0.3);
+  //scale(0.3);
   pushMatrix();
   translate( delta_x, 0);
   criar_dino();
@@ -106,7 +106,7 @@ void criar_dino()
       
       pushMatrix();
       translate(-55,15);
-      box(40,50,130);
+      box(40,50,150);
       popMatrix();
       
       pushMatrix();
@@ -173,24 +173,24 @@ void criar_dino()
     // Rabo
     pushMatrix();
       translate(-110,-36);
-      box(75,75,120);
+      box(75,75,150);
       pushMatrix();
         translate(-15,-48);
-        box(45,20,90);
+        box(45,22,150);
         translate(-8,-15);
-        box(30,30,70);
+        box(30,32,150);
       popMatrix();
       
       pushMatrix();
         translate(-50,-40);
-        box(25,160,70);
+        box(25,160,150);
       popMatrix();
       
       
       translate(10,55);
-      box(55,35,110);
+      box(55,35,150);
       translate(15,26);
-       box(20,20,110);
+       box(20,20,150);
     popMatrix();
     
     pushMatrix();
