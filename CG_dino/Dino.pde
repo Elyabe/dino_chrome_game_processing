@@ -7,7 +7,7 @@ class Dino
   Dino()
   {
     this.vivo = false;
-    this.andando = false;
+    this.andando = true;
     this.agachado = false;
     this.birthday = true;
   }

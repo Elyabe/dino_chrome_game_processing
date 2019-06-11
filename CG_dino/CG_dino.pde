@@ -16,12 +16,17 @@ float roty = PI/4, delta_x, PASSO_FRENTE = 8 , PASSO_TRAS = 16;
 float angulo = 0, angulo_lua = 0;
 float dirY, dirX, i = 0; 
 
+float valor_sort_nuvem, valor_sort_cacto;
 
 double alet;
+int qtd;
 
 Dino rex;
+Nuvem nuvem;
+Cacto cacto;
+
 void setup() {
-  size(800, 800, P3D);
+  size(1000, 800, P3D);
   fill(255);
   stroke(1);
   dirY = (mouseY / float(height) - 0.5) * 2;
@@ -32,213 +37,113 @@ void setup() {
   alet = Math.random();
   
   rex = new Dino();
+  nuvem = new Nuvem();
+  cacto = new Cacto();
+  
+  sortear_elementos();
 }
 
 void draw() {
   background(255);
   noStroke();
-  directionalLight(204, 204, 204, -dirX, -dirY, -1);
-  translate(width/2.0, height/2.0, -100);
-  angulo = (angulo + 0.35 ) % 360;
   
-  rex.agachado = false;
-  if ( keyPressed )
-  {
-    if ( key == 'u' )
-      translate(0,-150);
-    else if ( key == 'l' )
-    {
-      rex.agachar();
-      rex.birthday = false;
-      //delta_x += 100/( PASSO_FRENTE + PASSO_TRAS );
-    }else if ( key == 'r' )
-     { // delta_x -= 100/( PASSO_FRENTE + PASSO_TRAS );
-     } 
-  }
-  rotateY(radians(angulo));
-  rotateX(rotx);
-  rotateY(roty);
-  scale(0.5);
-  pushMatrix();
-  translate( delta_x, 0);
-  rex.criar_dino();
+  //rotateX(rotx);
+  //rotateY(roty);
+  
+  directionalLight(204, 204, 204, -dirX, -dirY, -1);
+  pushMatrix();  
+    translate(100, height - 60, 0);
+    scale(0.25);
+    rex.criar_dino();
   popMatrix();
+  
+  //translate(width/2.0, height/2.0, -100);
+  ////angulo = (angulo + 0.35 ) % 360;
+  
+  //rex.agachado = false;
+  //if ( keyPressed )
+  //{
+  //  if ( key == 'u' )
+  //    translate(0,-150);
+  //  else if ( key == 'l' )
+  //  {
+  //    rex.agachar();
+  //    rex.birthday = false;
+  //    //delta_x += 100/( PASSO_FRENTE + PASSO_TRAS );
+  //  }else if ( key == 'r' )
+  //   { // delta_x -= 100/( PASSO_FRENTE + PASSO_TRAS );
+  //   } 
+  //}
+  //rotateY(radians(angulo));
+  
+  //scale(0.3);
+  //pushMatrix();
+  
+  pushMatrix();
+  translate(width, 100);
+  scale(0.4);
+  translate( -delta_x, 0);
+  
+  if ( valor_sort_nuvem > 0.5)
+    nuvem.criar_nuvem();
+  
+  
+    pushMatrix();
+    translate(0, height + 800);
+    if ( valor_sort_cacto < 0.6)
+    {
+      
+      switch(qtd)
+      {
+        case 1:
+            cacto.criar_cacto();
+            break;
+        case 2:
+            cacto.criar_cacto();
+            translate(150,0);
+            cacto.criar_cacto();
+            break;
+        case 3:
+            cacto.criar_cacto();
+            translate(150,0);
+            cacto.criar_cacto();
+            translate(150,0);
+            cacto.criar_cacto();
+      }
+    }
+    popMatrix();
+    
+    if ( delta_x > 2*width + 200 ) 
+      sortear_elementos();
+    
+  popMatrix();
+  
+  ////rex.criar_dino();
+  //popMatrix();
+  //rex.criar_dino();
+  
   //translate( 400, 0, 50);
   //criar_dino();
-  translate( 450, 0, 0);
+  //translate( 450, 0, 0);
   //criar_dino();
   //criar_cacto();
-  translate( 0, -400, 50);
+  //translate( 0, -400, 50);
   //criar_nuvem();
+  
+  delta_x += 10;
+  
+
+  
 }
 
-void criar_nuvem()
+
+void sortear_elementos()
 {
-  pushMatrix();
-    box(20);
-    
-    translate(20,-10);
-    box(20);
-    translate(20,-10);
-    box(20);
-    
-    translate(30,0);
-    box(40,20,20);
-    translate(25,-15);
-    box(20);
-    translate(10,-15);
-    box(20);
-    translate(10,-15);
-    box(20);
-    translate(20,-15);
-    box(40,20,20);
-    translate(25,5);
-    box(20);
-    translate(20,10);
-    box(20);
-    translate(20,15);
-    box(40,20,20);
-    translate(20,10);
-    box(20);
-    translate(10,10);
-    box(20);
-    translate(10,10);
-    box(20);
-    translate(0,10);
-    box(20);
-    translate(-30,15);
-    box(120,20,20);
-  popMatrix();
+    valor_sort_cacto = (float)Math.random();
+    valor_sort_nuvem = (float)Math.random();
+    qtd = (int)(Math.random()*3);
+    delta_x = 0;
 }
-
-void criar_cacto()
-{  
-    //stroke(0);
-  pushMatrix();
-  
-    translate(0,0);//cubo caule
-    box(50,300,60);
-
-      pushMatrix();
-        translate(0,-155);//cubo do topo
-        box(35,10,40);
-      popMatrix();
-    
-      pushMatrix();
-          
-           if ( alet > 0.5 )
-          translate(0,-50);//cubo 1 inferior
-          //galho direito do cacto
-          
-          translate(42,40);//cubo 1 inferior
-          box(35,30,60);
-       
-          pushMatrix();
-            translate(22,0);//cubo 2 quina 1
-            box(10,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(27,-10);//cubo 3 quina 2
-            box(20,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(29,-20);//cubo 4 base do galho
-            box(33,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(32,-75);//cubo 5 galho
-            box(39,100,60);
-            
-            pushMatrix();
-              translate(0,-55);//cubo 6 topo do galho
-              box(25,5,40);
-            popMatrix();
-            
-          popMatrix();
-          
-      popMatrix();
-      
-      
-pushMatrix();
-  
-          /*galho esquerdo do cacto*/
-          
-          translate(-42,45);//cubo 1 inferior
-          box(-35,-35,60);
-       
-          pushMatrix();
-            translate(-24,0);//cubo 2 quina 1
-            box(14,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-27,-15);//cubo 3 quina 2
-            box(-20,15,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-29,-25);//cubo 4 base do galho
-            box(-35,-10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-29,-70);//cubo 5 galho
-            box(-35,-80,60);
-            
-            pushMatrix();
-              translate(0,-44);//cubo 6 topo do galho
-              box(-25,-5,40);
-            popMatrix();
-            
-          popMatrix();
-          
-      popMatrix();
-  popMatrix();
-  
-  
- /* pushMatrix();
-  
-          galho esquerdo do cacto
-          
-          translate(-42,-40);//cubo 1 inferior
-          box(35,30,60);
-       
-          pushMatrix();
-            translate(-22,0);//cubo 2 quina 1
-            box(10,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-27,10);//cubo 3 quina 2
-            box(20,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-29,20);//cubo 4 base do galho
-            box(35,10,60);
-          popMatrix();
-          
-          pushMatrix();
-            translate(-29,75);//cubo 5 galho
-            box(35,100,60);
-            
-            pushMatrix();
-              translate(0,55);//cubo 6 topo do galho
-              box(25,5,40);
-            popMatrix();
-            
-          popMatrix();
-          
-      popMatrix();
-  popMatrix();
-  */
-  
-   
-}   
-
 
 void mouseDragged() {
   float rate = 0.01;
