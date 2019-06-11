@@ -2,13 +2,14 @@ class Dino
 {
   boolean andando;
   boolean agachado;
-  boolean vivo;
+  boolean vivo, birthday;
   
   Dino()
   {
-    this.vivo = true;
+    this.vivo = false;
     this.andando = false;
     this.agachado = false;
+    this.birthday = true;
   }
   
   void criar_dino() 
@@ -51,6 +52,14 @@ class Dino
         if ( keyPressed && key == 'c' )
           rotateZ(radians(20));
         
+        if ( this.birthday )
+        {
+          pushMatrix();
+          translate(100,-400);
+          this.drawCylinder(5, 80, 200, 16);
+          this.star(0,0,30,15, 5);
+          popMatrix();
+        }
         
         //cabeca
         pushMatrix();
@@ -74,8 +83,21 @@ class Dino
           box(140,90,150);
           
           pushMatrix();
-          translate(-115,-25);
-          box(30,40,150);
+             if( this.vivo )
+             {
+               x.x =30;
+               x.y = 40;
+               t.x = -115;
+               t.y = -25;
+             } else {
+               x.x = 20;
+               x.y = 40;
+               t.x = -105;
+               t.y = -25;
+             }
+
+          translate(t.x,t.y);
+          box(x.x,x.y,150);
           popMatrix();
           
           translate(-30,-50);
@@ -240,7 +262,62 @@ class Dino
       else 
         i = 0;
   } 
+ 
+  void drawCylinder(float topRadius, float bottomRadius, float tall, int sides) {
+  float angle = 0;
+  float angleIncrement = TWO_PI / sides;
+  beginShape(QUAD_STRIP);
+  for (int i = 0; i < sides + 1; ++i) {
+    vertex(topRadius*cos(angle), 0, topRadius*sin(angle));
+    vertex(bottomRadius*cos(angle), tall, bottomRadius*sin(angle));
+    angle += angleIncrement;
+  }
+  endShape();
   
+  // If it is not a cone, draw the circular top cap
+  if (topRadius != 0) {
+    angle = 0;
+    beginShape(TRIANGLE_FAN);
+    
+    // Center point
+    vertex(0, 0, 0);
+    for (int i = 0; i < sides + 1; i++) {
+      vertex(topRadius * cos(angle), 0, topRadius * sin(angle));
+      angle += angleIncrement;
+    }
+    endShape();
+  }
+
+  // If it is not a cone, draw the circular bottom cap
+  if (bottomRadius != 0) {
+    angle = 0;
+    beginShape(TRIANGLE_FAN);
+
+    // Center point
+    vertex(0, tall, 0);
+    for (int i = 0; i < sides + 1; i++) {
+      vertex(bottomRadius * cos(angle), tall, bottomRadius * sin(angle));
+      angle += angleIncrement;
+    }
+    endShape();
+  }
+}
+
+void star(float x, float y, float radius1, float radius2, int npoints) {
+  float angle = TWO_PI / npoints;
+  float halfAngle = angle/2.0;
+  beginShape();
+  for (float a = 0; a < TWO_PI; a += angle) {
+    float sx = x + cos(a) * radius2;
+    float sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a+halfAngle) * radius1;
+    sy = y + sin(a+halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+}
+
   void agachar()
   {
     this.agachado = true;

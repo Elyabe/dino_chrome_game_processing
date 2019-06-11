@@ -39,7 +39,7 @@ void draw() {
   noStroke();
   directionalLight(204, 204, 204, -dirX, -dirY, -1);
   translate(width/2.0, height/2.0, -100);
-  //angulo = (angulo + 0.35 ) % 360;
+  angulo = (angulo + 0.35 ) % 360;
   
   rex.agachado = false;
   if ( keyPressed )
@@ -49,14 +49,16 @@ void draw() {
     else if ( key == 'l' )
     {
       rex.agachar();
+      rex.birthday = false;
       //delta_x += 100/( PASSO_FRENTE + PASSO_TRAS );
     }else if ( key == 'r' )
-     delta_x -= 100/( PASSO_FRENTE + PASSO_TRAS );
+     { // delta_x -= 100/( PASSO_FRENTE + PASSO_TRAS );
+     } 
   }
   rotateY(radians(angulo));
   rotateX(rotx);
   rotateY(roty);
-  scale(0.3);
+  scale(0.5);
   pushMatrix();
   translate( delta_x, 0);
   rex.criar_dino();
