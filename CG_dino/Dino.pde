@@ -1,22 +1,42 @@
-class Dino
+class Dino extends ObjetoCenario 
 {
   boolean andando;
   boolean agachado;
-  boolean vivo, birthday;
+  boolean vivo, birthday, duasDimensoes;
+  int profundidade;
+  float fator;
+  PVector pos;
   
   Dino()
   {
     this.vivo = false;
     this.andando = true;
     this.agachado = false;
-    this.birthday = true;
+    this.birthday = false;
+    this.fator = 1;
+    this.pos = new PVector(0,0);
+    
+  }
+  
+  Dino(boolean duasDim)
+  {
+    super();
+    this.duasDimensoes = duasDim;
+    if ( duasDimensoes )
+      profundidade = 10;
+    else
+      profundidade = 150;
+    this.fator = profundidade/150;
+    this.andando = true;
+    this.pos = new PVector(0,0);
+    this.raio = 500;
   }
   
   void criar_dino() 
   {
       float box_ca_x;
       PVector x = new PVector(), t = new PVector();
-      box(150);
+      box(150,150,profundidade);
       
       pushMatrix();
         
@@ -32,19 +52,19 @@ class Dino
         }
         
         translate(t.x,t.y);
-        box(box_ca_x,75,150);
+        box(box_ca_x,75,profundidade);
         
         
         if ( !this.agachado )
         {
           pushMatrix();
           translate(-55,15);
-          box(40,50,150);
+          box(40,50,profundidade);
           popMatrix();
           
           pushMatrix();
             translate(10,-50);
-            box(50,25,150);
+            box(50,25,profundidade);
           popMatrix();
         }
         pushMatrix();
@@ -73,14 +93,14 @@ class Dino
             
           translate(x.x, x.y);
             
-          box(90,90,150);
+          box(90,90,profundidade);
           //boca
           translate(85,35);
-          box(80,20,150);
+          box(80,20,profundidade);
           // boca cima
           
           translate(0,-70);
-          box(140,90,150);
+          box(140,90,profundidade);
           
           pushMatrix();
              if( this.vivo )
@@ -97,11 +117,11 @@ class Dino
              }
 
           translate(t.x,t.y);
-          box(x.x,x.y,150);
+          box(x.x,x.y,profundidade);
           popMatrix();
           
           translate(-30,-50);
-          box(170,20,150);
+          box(170,20,profundidade);
         popMatrix();
         
         popMatrix();
@@ -122,7 +142,7 @@ class Dino
         
         // Peitoral
         translate(t.x,t.y);
-        box(x.x,x.y,150);
+        box(x.x,x.y,profundidade);
         
           // Pata
           pushMatrix();
@@ -135,7 +155,7 @@ class Dino
               }
               
               translate(t.x,t.y,45);
-              box(25,25,20);
+              box(25,25,20*fator);
               
               if ( this.agachado ){
                 t.x = 15;
@@ -149,7 +169,7 @@ class Dino
                 x.y = 45;
               }
               translate(t.x,t.y,0);
-              box(x.x,x.y,20);
+              box(x.x,x.y,20*fator);
           popMatrix();
           
           pushMatrix();
@@ -162,7 +182,7 @@ class Dino
               }
               
               translate(t.x,t.y,-45);
-              box(25,25,20);
+              box(25,25,20*fator);
               
               if ( this.agachado ){
                 t.x = 15;
@@ -176,7 +196,7 @@ class Dino
                 x.y = 45;
               }
               translate(t.x,t.y,0);
-              box(x.x,x.y,20);
+              box(x.x,x.y,20*fator);
               //translate(40,-20,-45);
               //box(25,25,20);
               //translate(20,10,0);
@@ -187,20 +207,20 @@ class Dino
       
       pushMatrix();
          translate(95,20);
-         box(40,32,150);
+         box(40,32,profundidade);
          translate(-10,25);
-         box(20,20,150);
+         box(20,20,profundidade);
       popMatrix();
       
       // Rabo
       pushMatrix();
         translate(-110,-36);
-        box(75,75,150);
+        box(75,75,profundidade);
         pushMatrix();
           translate(-15,-48);
-          box(45,22,150);
+          box(45,22,profundidade);
           translate(-8,-15);
-          box(30,32,150);
+          box(30,32,profundidade);
         popMatrix();
         
       if ( this.agachado ){
@@ -217,13 +237,13 @@ class Dino
        
         pushMatrix();
           translate(t.x,t.y);
-          box(x.x,x.y,150);
+          box(x.x,x.y,profundidade);
         popMatrix();
         
         translate(10,55);
-        box(55,35,150);
+        box(55,35,profundidade);
         translate(15,26);
-         box(20,20,150);
+         box(20,20,profundidade);
       popMatrix();
       
       pushMatrix();
@@ -233,12 +253,12 @@ class Dino
       
       pushMatrix();
         translate(-15,80,-35);
-        box(70,20,40);
+        box(70,20,40*fator);
         translate(0,30);
-        box(30,80,40);
+        box(30,80,40*fator);
         
         translate(15,40);
-        box(60,20,40);
+        box(60,20,40*fator);
       popMatrix();
       
       if ( this.andando && i < PASSO_FRENTE)
@@ -246,12 +266,12 @@ class Dino
        
       pushMatrix();
         translate(25,80,40);
-        box(70,20,40);
+        box(70,20,40*fator);
         translate(0,30);
-        box(30,80,40);
+        box(30,80,40*fator);
         
         translate(15,40);
-        box(60,20,40);
+        box(60,20,40*fator);
       popMatrix();
       
       popMatrix();
@@ -261,6 +281,13 @@ class Dino
         i += 1;
       else 
         i = 0;
+        
+       //pushMatrix();   
+       //  noFill();
+       //  stroke(1);
+       //  circle(this.pos.x, this.pos.y, this.raio);
+       //popMatrix();
+        
   } 
  
   void drawCylinder(float topRadius, float bottomRadius, float tall, int sides) {
